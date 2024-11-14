@@ -80,6 +80,8 @@ class TimerService : Service() {
 
     inner class TimerThread(private val startValue: Int) : Thread() {
 
+
+
         override fun run() {
             isRunning = true
             try {
@@ -101,6 +103,15 @@ class TimerService : Service() {
         }
 
     }
+
+//    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+//        val startValue = intent?.getIntExtra(KEY_VALUE, 0) ?: 0
+//        start(startValue)
+//
+//        return START_NOT_STICKY
+//    }
+
+
 
     override fun onUnbind(intent: Intent?): Boolean {
         if (::t.isInitialized) {
