@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private var binder: TimerService.TimerBinder? = null
     private var isBound = false
+    private var isPaused = false
 
     val timerHandler = Handler(Looper.getMainLooper()) {
         findViewById<TextView>(R.id.textView).text = it.what.toString()
@@ -49,15 +50,21 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.startButton).setOnClickListener {
             if (isBound) {
-                binder?.start(100)
+                if (!binder?.isRunning!!) {
+                    binder?.start(100)
+                    findViewById<Button>(R.id.startButton).text = "Pause"
+                    isPaused = false
+                } else {
+                    if (isPaused) {
+                        binder?.start(100)  // Resume timer
+                        findViewById<Button>(R.id.startButton).text = "Pause"
+                    } else {
+                        binder?.pause()
+                        findViewById<Button>(R.id.startButton).text = "Unpause"
+                    }
+                    isPaused = !isPaused
+                }
             }
-
-            if (binder?.isRunning == true) {
-                findViewById<Button>(R.id.startButton).text = "Pause"
-            } else {
-                findViewById<Button>(R.id.startButton).text = "Unpause"
-            }
-
         }
         
         findViewById<Button>(R.id.stopButton).setOnClickListener {
